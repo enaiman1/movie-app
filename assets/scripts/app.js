@@ -6,6 +6,7 @@ const confirmAddMovieButton = cancelAddMovieButton.nextElementSibling;
 const userInputs = addMovieModal.querySelectorAll('input');
 const entryTextSection = document.getElementById('entry-text');
 const deleteMovieModal = document.getElementById('delete-modal');
+
 const movies = [];
 
 // what is shown to the user depending on if there are movies saved or not
@@ -16,7 +17,7 @@ const updateUI = () => {
         entryTextSection.style.display = "none";
     }
 }
-
+// this function will delete the movie by id
 const deleteMovie = movieId => {
     let movieIndex = 0
     for(const movie of movies){
@@ -27,20 +28,21 @@ const deleteMovie = movieId => {
 }
 movies.splice(movieIndex, 1);
 const listRoot = document.getElementById("movie-list");
-listRoot.children[movieIndex].remove()
+listRoot.children[movieIndex].remove();
 }
 
 const closeMovieDeletionModal = () => {
-    toggleBackdrop()
-    deleteMovieModal.classList.remove('visible')
+    toggleBackdrop();
+    deleteMovieModal.classList.remove("visible");
 }
 
 const deleteMovieHandler = movieId => {
-deleteMovieModal.classList.add('visible');
-toggleBackdrop()
+deleteMovieModal.classList.add("visible");
+toggleBackdrop();
     // deleteMovie(movieId)
 };
 
+// Once user click submit this function renders the user input on to the page
 const renderNewMovieElement = (id, title, imageUrl, rating) => {
     const newMovieElement = document.createElement("li");
     newMovieElement.className = 'movie-element';
@@ -63,11 +65,11 @@ const renderNewMovieElement = (id, title, imageUrl, rating) => {
 const toggleBackdrop = () => {
     backdrop.classList.toggle("visible");
 }
-
+// this function will make the modal go away
 const closeMovieModal = () => {
-    addMovieModal.classList.remove('visible')
+    addMovieModal.classList.remove('visible');
 }
-
+// this function will make the user input modal appear
 const showMovieModal = () => {
     addMovieModal.classList.add("visible");
     toggleBackdrop();
@@ -82,7 +84,7 @@ const clearMovieInput = () => {
 
 // allows use to use the cancle button
 const cancelAddMovieHandler = () => {
-   closeMovieModal()
+   closeMovieModal();
     clearMovieInput();
 };
 
