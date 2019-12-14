@@ -5,6 +5,7 @@ const cancelAddMovieButton = addMovieModal.querySelector('.btn--passive');
 const confirmAddMovieButton = cancelAddMovieButton.nextElementSibling;
 const userInputs = addMovieModal.querySelectorAll('input');
 const entryTextSection = document.getElementById('entry-text');
+const newMovieElement = document.createElement("li");
 const movies = [];
 
 // what is shown to the user depending on if there are movies saved or not
@@ -16,8 +17,8 @@ const updateUI = () => {
     }
 }
 
-const deleteMovieHandler = (movieId) => {
-let movieIndex = 0
+const deleteMovie = movieId => {
+    let movieIndex = 0
     for(const movie of movies){
     if ( movie.id === movieId){
         break;
@@ -27,10 +28,21 @@ let movieIndex = 0
 movies.splice(movieIndex, 1);
 const listRoot = document.getElementById("movie-list");
 listRoot.children[movieIndex].remove()
+}
+
+const closeMovieDeletionModal = () => {
+    toggleBackdrop()
+    deleteMovieModal.classList.remove('visible ')
+}
+
+const deleteMovieHandler = movieId => {
+deleteMovieModal.classList.add('visible');
+toggleBackdrop()
+    // deleteMovie(movieId)
 };
 
 const renderNewMovieElement = (id, title, imageUrl, rating) => {
-    const newMovieElement = document.createElement("li");
+    
     newMovieElement.className = 'movie-element';
     newMovieElement.innerHTML = `
  <div class="movie-element__image">
@@ -52,9 +64,17 @@ const toggleBackdrop = () => {
     backdrop.classList.toggle("visible");
 }
 
+const closeMovieModal = () => {
+    addMovieModal.classList.remove('visible')
+}
+
+// const deleteMovieHandler = movieId => {
+//     deleteMovieModal.classList.add('visible');
+//     toggleBackdrop()
+// }
 // this function will open and close modal
-const toggleMovieModal = () => {
-    addMovieModal.classList.toggle("visible");
+const showMovieModal = () => {
+    addMovieModal.classList.add("visible");
     toggleBackdrop();
 }
 
@@ -67,7 +87,7 @@ const clearMovieInput = () => {
 
 // allows use to use the cancle button
 const cancelAddMovieHandler = () => {
-    toggleMovieModal();
+   closeMovieModal()
     clearMovieInput();
 };
 
@@ -96,7 +116,8 @@ const addMovieHandler = () => {
     };
     movies.push(newMovie);
     console.log(movies);
-    toggleMovieModal();
+    closeMovieModal();
+    toggleBackdrop();
     clearMovieInput();
     renderNewMovieElement(newMovie.id, newMovie.title, newMovie.image, newMovie.rating);
     updateUI();
@@ -104,11 +125,12 @@ const addMovieHandler = () => {
 
 // this function will toggle between a dark background when modal displays
 const backdropClickHandler = () => {
-    toggleMovieModal();
+   closeMovieModal();
+   closeMovieDeletionModal();
 }
 
 // event listener to display modal to add new movie
-startAddMovieButton.addEventListener("click", toggleMovieModal);
+startAddMovieButton.addEventListener("click", showMovieModal);
 
 // allows you to click on background to make modal disappear
 backdrop.addEventListener("click", backdropClickHandler);
