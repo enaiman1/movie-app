@@ -5,7 +5,7 @@ const cancelAddMovieButton = addMovieModal.querySelector('.btn--passive');
 const confirmAddMovieButton = cancelAddMovieButton.nextElementSibling;
 const userInputs = addMovieModal.querySelectorAll('input');
 const entryTextSection = document.getElementById('entry-text');
-const newMovieElement = document.createElement("li");
+const deleteMovieModal = document.getElementById('delete-modal');
 const movies = [];
 
 // what is shown to the user depending on if there are movies saved or not
@@ -32,7 +32,7 @@ listRoot.children[movieIndex].remove()
 
 const closeMovieDeletionModal = () => {
     toggleBackdrop()
-    deleteMovieModal.classList.remove('visible ')
+    deleteMovieModal.classList.remove('visible')
 }
 
 const deleteMovieHandler = movieId => {
@@ -42,7 +42,7 @@ toggleBackdrop()
 };
 
 const renderNewMovieElement = (id, title, imageUrl, rating) => {
-    
+    const newMovieElement = document.createElement("li");
     newMovieElement.className = 'movie-element';
     newMovieElement.innerHTML = `
  <div class="movie-element__image">
@@ -68,11 +68,6 @@ const closeMovieModal = () => {
     addMovieModal.classList.remove('visible')
 }
 
-// const deleteMovieHandler = movieId => {
-//     deleteMovieModal.classList.add('visible');
-//     toggleBackdrop()
-// }
-// this function will open and close modal
 const showMovieModal = () => {
     addMovieModal.classList.add("visible");
     toggleBackdrop();
