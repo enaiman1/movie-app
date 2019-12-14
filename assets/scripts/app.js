@@ -16,14 +16,23 @@ const toggleMovieModal = () => {
     toggleBackdrop();
 }
 
+const clearMovieInput =() =>{
+    for(const usrInput of userInputs){
+        usrInput.value = "";
+    }
+}
+
 const cancelAddMovieHandler = () => {
     toggleMovieModal();
+    clearMovieInput()
 };
 
 const addMovieHandler = () => {
     const titleValue = userInputs[0].value;
     const imageUrlValue = userInputs[1].value;
     const ratingValue = userInputs[2].value;
+    
+    const movies = [];
 
     if (
         titleValue.trim() === "" ||
@@ -34,6 +43,15 @@ const addMovieHandler = () => {
         ) {
             alert("please enter valid values (rating between 1 and 5")
     }
+    const newMovie = {
+        title: titleValue,
+        image: imageUrlValue,
+        rating: ratingValue
+    };
+    movies.push(newMovie);
+    console.log(movies)
+    toggleMovieModal()
+    clearMovieInput()
 }
 
 // this function will toggle between a dark background when modal displays
