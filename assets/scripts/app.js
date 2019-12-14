@@ -9,6 +9,10 @@ const deleteMovieModal = document.getElementById('delete-modal');
 
 const movies = [];
 
+// create a backdrop when modal appears
+const toggleBackdrop = () => {
+    backdrop.classList.toggle("visible");
+}
 // what is shown to the user depending on if there are movies saved or not
 const updateUI = () => {
     if (movies.length === 0) {
@@ -17,29 +21,49 @@ const updateUI = () => {
         entryTextSection.style.display = "none";
     }
 }
-// this function will delete the movie by id
-const deleteMovie = movieId => {
-    let movieIndex = 0
-    for(const movie of movies){
-    if ( movie.id === movieId){
-        break;
-    }
-    movieIndex++;
-}
-movies.splice(movieIndex, 1);
-const listRoot = document.getElementById("movie-list");
-listRoot.children[movieIndex].remove();
-}
 
 const closeMovieDeletionModal = () => {
     toggleBackdrop();
     deleteMovieModal.classList.remove("visible");
 }
-
+// this function will delete the movie by id
 const deleteMovieHandler = movieId => {
-deleteMovieModal.classList.add("visible");
-toggleBackdrop();
-    // deleteMovie(movieId)
+    let movieIndex = 0
+    for (const movie of movies) {
+        if (movie.id === movieId) {
+            break;
+        }
+        movieIndex++;
+    }
+    movies.splice(movieIndex, 1);
+    const listRoot = document.getElementById("movie-list");
+    listRoot.children[movieIndex].remove();
+    closeMovieDeletionModal();
+    updateUI();
+}
+
+
+// this on click event will confirm the deletion in the modal
+const startDeletionHandler = movieId => {
+    deleteMovieModal.classList.add("visible");
+    toggleBackdrop();
+    // cancle button
+    const cancelBtn = deleteMovieModal.querySelector(".btn--passive");
+    // yes button
+    let confirmBtn = deleteMovieModal.querySelector(".btn--danger");
+
+    // replace confirm btn and clones a new object so all previous listeners can be deleted
+    confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+    // get access back to the yes button
+    confirmBtn = deleteMovieModal.querySelector(".btn--danger");
+
+    cancelBtn.removeEventListener("click", closeMovieDeletionModal);
+    // event listener for cancel button
+    cancelBtn.addEventListener("click", closeMovieDeletionModal);
+    // event lister for the dyes button
+    confirmBtn.addEventListener("click", deleteMovieHandler.bind(null, movieId));
+
+
 };
 
 // Once user click submit this function renders the user input on to the page
@@ -56,15 +80,12 @@ const renderNewMovieElement = (id, title, imageUrl, rating) => {
 </div>
 
  `;
-    newMovieElement.addEventListener("click", deleteMovieHandler.bind(null, id ));
+    newMovieElement.addEventListener("click", startDeletionHandler.bind(null, id));
     const listRoot = document.getElementById("movie-list");
     listRoot.append(newMovieElement);
 }
 
-// create a backdrop when modal appears
-const toggleBackdrop = () => {
-    backdrop.classList.toggle("visible");
-}
+
 // this function will make the modal go away
 const closeMovieModal = () => {
     addMovieModal.classList.remove('visible');
@@ -84,7 +105,8 @@ const clearMovieInput = () => {
 
 // allows use to use the cancle button
 const cancelAddMovieHandler = () => {
-   closeMovieModal();
+    closeMovieModal();
+    toggleBackdrop();
     clearMovieInput();
 };
 
@@ -122,8 +144,9 @@ const addMovieHandler = () => {
 
 // this function will toggle between a dark background when modal displays
 const backdropClickHandler = () => {
-   closeMovieModal();
-   closeMovieDeletionModal();
+    closeMovieModal();
+    closeMovieDeletionModal();
+    clearMovieInput();
 }
 
 // event listener to display modal to add new movie
